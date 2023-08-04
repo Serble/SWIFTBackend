@@ -17,6 +17,7 @@ internal static class Program {
         GlobalConfig.Init(config);
         
         StorageManager = new MySqlStorage();
+        StorageManager.Init();
         
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

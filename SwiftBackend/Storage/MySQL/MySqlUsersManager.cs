@@ -15,17 +15,21 @@ public partial class MySqlStorage {
         SwiftUser user = new() {
             Id = reader.GetString("id"),
             Username = reader.GetString("username"),
-            CreatedAt = reader.GetDateTime("created_at").DateTimeToUnixMillis()
+            CreatedAt = reader.GetDateTime("created_at").DateTimeToUnixMillis(),
+            Premium = reader.GetBoolean("premium"),
+            Admin = reader.GetBoolean("admin")
         };
         await reader.DisposeAsync();
         return user;
     }
     
     public async Task CreateUser(SwiftUser user) {
-        await MySqlHelper.ExecuteNonQueryAsync(_connectString, @$"INSERT INTO {_tablePrefix}users (id, username, created_at) VALUES (@id, @username, @created_at)", new MySqlParameter[] {
+        await MySqlHelper.ExecuteNonQueryAsync(_connectString, @$"INSERT INTO {_tablePrefix}users (id, username, created_at, premium, admin) VALUES (@id, @username, @created_at, @premium, @admin)", new MySqlParameter[] {
             new("@id", user.Id),
             new("@username", user.Username),
-            new("@created_at", user.CreatedAt.UnixMillisToDateTime())
+            new("@created_at", user.CreatedAt.UnixMillisToDateTime()),
+            new("@premium", user.Premium),
+            new("@admin", user.Admin)
         });
     }
     

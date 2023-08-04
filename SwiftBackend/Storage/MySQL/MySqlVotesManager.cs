@@ -38,7 +38,7 @@ GROUP BY
 
     public async Task SubmitVote(UserVote vote) {
         await MySqlHelper.ExecuteNonQueryAsync(_connectString, @$"INSERT INTO {_tablePrefix}votes (id, domain, user_id, value) VALUES (@id, @domain, @user_id, @value) ON DUPLICATE KEY UPDATE value=@value", new MySqlParameter[] {
-            new("@id", new Guid().ToString()),
+            new("@id", Guid.NewGuid()),
             new("@domain", vote.Domain),
             new("@user_id", vote.UserId),
             new("@value", vote.Vote)
