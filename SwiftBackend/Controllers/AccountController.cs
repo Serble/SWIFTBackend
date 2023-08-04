@@ -19,5 +19,11 @@ public class AccountController : ControllerBase {
         }
         return Ok(user);
     }
+    
+    [HttpOptions]
+    public ActionResult Options() {
+        Response.Headers.Add("Allow", "GET, OPTIONS");
+        return Ok();
+    }
 
 }

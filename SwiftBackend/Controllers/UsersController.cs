@@ -20,4 +20,10 @@ public class UsersController : ControllerBase {
         return Ok(chatUser);
     }
     
+    [HttpOptions]
+    public ActionResult Options(string userid) {
+        Response.Headers.Add("Allow", "GET, OPTIONS");
+        return Ok();
+    }
+    
 }

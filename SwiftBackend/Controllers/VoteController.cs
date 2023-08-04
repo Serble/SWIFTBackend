@@ -63,5 +63,23 @@ public class VoteController : ControllerBase {
         });
     }
     
+    [HttpOptions]
+    public IActionResult Options() {
+        Response.Headers.Add("Allow", "POST, OPTIONS");
+        return Ok();
+    }
+    
+    [HttpOptions("{domain}")]
+    public IActionResult OptionsDo() {
+        Response.Headers.Add("Allow", "GET, OPTIONS");
+        return Ok();
+    }
+    
+    [HttpOptions("user/{domain}")]
+    public IActionResult OptionsD() {
+        Response.Headers.Add("Allow", "GET, OPTIONS");
+        return Ok();
+    }
+    
 
 }

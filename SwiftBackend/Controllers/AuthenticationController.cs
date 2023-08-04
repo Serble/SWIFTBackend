@@ -54,4 +54,16 @@ public class AuthenticationController : ControllerBase {
         return Ok(authCodeExchangeResponse);
     }
     
+    [HttpOptions]
+    public ActionResult Options() {
+        Response.Headers.Add("Allow", "POST, OPTIONS");
+        return Ok();
+    }
+    
+    [HttpOptions("refresh")]
+    public ActionResult RefreshOptions() {
+        Response.Headers.Add("Allow", "POST, OPTIONS");
+        return Ok();
+    }
+    
 }
