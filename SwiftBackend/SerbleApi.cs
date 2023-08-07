@@ -54,7 +54,7 @@ public class SerbleApi {
                          $"client_id={GlobalConfig.Config["serble_app_id"]}&" +
                          $"client_secret={GlobalConfig.Config["serble_app_secret"]}&" +
                          "grant_type=authorization_code";
-            HttpResponseMessage response = await client.PostAsync(url, null);
+            HttpResponseMessage response = (await client.PostAsync(url, null)).EnsureSuccessStatusCode();
             AuthCodeExchangeResponse serbleResponse = await response.Content.ReadFromJsonAsync<AuthCodeExchangeResponse>() ?? throw new InvalidOperationException();
             _accessToken = serbleResponse.AccessToken;
             return serbleResponse;

@@ -17,14 +17,14 @@ public class AuthenticationHeader {
         }
 
         try {
-                string token = Authorization.Replace("Bearer ", "");
-                SerbleApi api = new(token);
-                SerbleUser? user = await api.GetUser();
-                if (user == null) {
-                    return null;
-                }
+            string token = Authorization.Replace("Bearer ", "");
+            SerbleApi api = new(token);
+            SerbleUser? user = await api.GetUser();
+            if (user == null) {
+                return null;
+            }
 
-                return await Program.StorageManager.GetUser(user.Id) == null ? null : user;
+            return await Program.StorageManager.GetUser(user.Id) == null ? null : user;
         }
         catch (Exception) {
             return null;
