@@ -77,4 +77,17 @@ public class SerbleApi {
         }
     }
     
+    public async Task<string[]?> GetOwnedProducts() {
+        EnsureAccessToken();
+        HttpClient client = GetHttpClient();
+        try {
+            const string url = APIURL + "/account";
+            HttpResponseMessage response = await client.GetAsync(url);
+            return await response.Content.ReadFromJsonAsync<string[]>() ?? throw new InvalidOperationException();
+        }
+        catch (Exception) {
+            return null;  // Failed
+        }
+    }
+    
 }

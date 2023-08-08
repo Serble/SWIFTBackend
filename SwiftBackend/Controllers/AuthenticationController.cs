@@ -22,11 +22,15 @@ public class AuthenticationController : ControllerBase {
         if (string.IsNullOrEmpty(serbleUser.Username)) {
             return BadRequest("Scope must include user_info");
         }
+        
+        string[]? ownedProducts = await api.GetOwnedProducts();
+        bool ownsPremium = ownedProducts != null && (ownedProducts.Contains("swiftpremium") || ownedProducts.Contains("premium"));
 
         if (chatUser != null) {
-            if (chatUser.Username == serbleUser.Username) return Ok(authCodeExchangeResponse);
-            // They changed their username
+            if (chatUser.Username == serbleUser.Username && chatUser.Premium == ownsPremium) return Ok(authCodeExchangeResponse);
+            // They changed their username or premium status
             chatUser.Username = serbleUser.Username;
+            chatUser.Premium = ownsPremium;
             await Program.StorageManager.EditUser(chatUser);
             return Ok(authCodeExchangeResponse);
         }
@@ -36,7 +40,7 @@ public class AuthenticationController : ControllerBase {
             Id = serbleUser.Id,
             Username = serbleUser.Username,
             CreatedAt = DateTime.UtcNow.DateTimeToUnixMillis(),
-            Premium = false,
+            Premium = ownsPremium,
             Admin = serbleUser.PermLevel == 2  // Make Serble admins Swift admins
         };
         await Program.StorageManager.CreateUser(chatUser);
