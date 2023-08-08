@@ -81,7 +81,7 @@ public class SerbleApi {
         EnsureAccessToken();
         HttpClient client = GetHttpClient();
         try {
-            const string url = APIURL + "/account";
+            const string url = APIURL + "/products";
             HttpResponseMessage response = await client.GetAsync(url);
             return await response.Content.ReadFromJsonAsync<string[]>() ?? throw new InvalidOperationException();
         }
