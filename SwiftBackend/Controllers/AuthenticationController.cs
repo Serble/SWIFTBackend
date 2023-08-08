@@ -55,6 +55,20 @@ public class AuthenticationController : ControllerBase {
         if (authCodeExchangeResponse == null) {
             return BadRequest("Invalid refresh token");
         }
+        SerbleUser? serbleUser = await api.GetUser();
+        SwiftUser? chatUser = await Program.StorageManager.GetUser(serbleUser!.Id);
+        if (chatUser == null) {
+            return BadRequest("User does not exist");
+        }
+        
+        string[]? ownedProducts = await api.GetOwnedProducts();
+        bool ownsPremium = ownedProducts != null && (ownedProducts.Contains("swiftpremium") || ownedProducts.Contains("premium"));
+        
+        if (chatUser.Username == serbleUser.Username && chatUser.Premium == ownsPremium) return Ok(authCodeExchangeResponse);
+        // They changed their username or premium status
+        chatUser.Username = serbleUser.Username!;
+        chatUser.Premium = ownsPremium;
+        await Program.StorageManager.EditUser(chatUser);
         return Ok(authCodeExchangeResponse);
     }
     
