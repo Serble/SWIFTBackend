@@ -36,7 +36,8 @@ public partial class MySqlStorage {
     public async Task EditUser(SwiftUser user) {
         await MySqlHelper.ExecuteNonQueryAsync(_connectString, @$"UPDATE {_tablePrefix}users SET username=@username, premium=@premium WHERE id=@id", new MySqlParameter[] {
             new("@id", user.Id),
-            new("@username", user.Username)
+            new("@username", user.Username),
+            new("@premium", user.Premium)
         });
     }
     
