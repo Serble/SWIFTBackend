@@ -7,10 +7,10 @@ public class SerbleUser {
     public string Id { get; set; } = null!;
     
     [JsonPropertyName("username")]
-    public string? Username { get; set; }
+    public string Username { get; set; }
     
     [JsonPropertyName("email")]
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     [JsonPropertyName("verifiedEmail")]
     public bool VerifiedEmail { get; set; }
@@ -22,11 +22,11 @@ public class SerbleUser {
     public int PremiumLevel{ get; set; }
     
     [JsonPropertyName("permString")]
-    public string? PermString{ get; set; }
+    public string PermString{ get; set; }
     
     [JsonPropertyName("authorizedApps")]
-    public object[]? AuthorizedApps{ get; set; }
+    public object[] AuthorizedApps{ get; set; }
     
     [JsonPropertyName("language")]
-    public string? Language{ get; set; }
+    public string Language{ get; set; }
 }

@@ -6,7 +6,7 @@ namespace SwiftBackend.Storage.MySQL;
 public partial class MySqlStorage : IStorageManager {
     
     private string _connectString = "";
-    private string? _tablePrefix;
+    private string _tablePrefix;
 
     public void Init() {
         Logger.Info("Initialising MySQL...");
@@ -38,6 +38,11 @@ public partial class MySqlStorage : IStorageManager {
                            value INT,
                            FOREIGN KEY (user_id) REFERENCES {_tablePrefix}users(id),
                            UNIQUE KEY (domain, user_id))");
+        SendMySqlStatement(@$"CREATE TABLE IF NOT EXISTS {_tablePrefix}bot_rating(
+                           id VARCHAR(64) primary key,
+                           domain VARCHAR(255),
+                           rating INT,
+                           UNIQUE KEY (domain))");
     }
 
     private void SendMySqlStatement(string statement) {

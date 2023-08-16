@@ -13,6 +13,7 @@ public static class DefaultConfig {
         { "mysql_table_prefix", "chatserver_" },
         { "serble_app_id", "xxxxxxxxxxxx" },
         { "serble_app_secret", "xxxxxxxxxxxx" },
+        { "open_ai_token", "xxxxxxxxxxxx" }
     };
 
 }

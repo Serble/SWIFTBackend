@@ -14,4 +14,7 @@ public class SiteVoteProfile {
     
     [JsonPropertyName("totalVotes")]
     public int TotalVotes { get; set; }
+    
+    [JsonPropertyName("botRating")]
+    public int BotRating { get; set; }
 }

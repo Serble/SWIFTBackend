@@ -9,11 +9,11 @@ public class UsersController : ControllerBase {
     
     [HttpGet]
     public async Task<ActionResult> GetUser([FromHeader] AuthenticationHeader authorization, [FromRoute] string userid) {
-        SerbleUser? user = await authorization.GetUser();
+        SerbleUser user = await authorization.GetUser();
         if (user == null) {
             return Unauthorized();
         }
-        SwiftUser? chatUser = await Program.StorageManager.GetUser(userid);
+        SwiftUser chatUser = await Program.StorageManager.GetUser(userid);
         if (chatUser == null) {
             return NotFound();
         }

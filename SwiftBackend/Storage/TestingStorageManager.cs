@@ -6,6 +6,7 @@ namespace SwiftBackend.Storage;
 public class TestingStorageManager : IStorageManager {
     public readonly List<SwiftUser> Users = new();
     public readonly List<UserVote> Votes = new();
+    public readonly Dictionary<string, int> BotRatings = new();
 
     public void Init() {
         Logger.Warn("Using testing storage manager");
@@ -13,7 +14,7 @@ public class TestingStorageManager : IStorageManager {
 
     public void Deinit() { }
 
-    public Task<SwiftUser?> GetUser(string id) {
+    public Task<SwiftUser> GetUser(string id) {
         return Task.FromResult(Users.FirstOrDefault(user => user.Id == id));
     }
 
@@ -44,7 +45,16 @@ public class TestingStorageManager : IStorageManager {
     }
 
     public Task<int?> GetUserVote(string userId, string domain) {
-        UserVote? vote = Votes.FirstOrDefault(vote => vote.UserId == userId && vote.Domain == domain);
+        UserVote vote = Votes.FirstOrDefault(vote => vote.UserId == userId && vote.Domain == domain);
         return vote == null ? Task.FromResult<int?>(null) : Task.FromResult<int?>(vote.Vote);
+    }
+
+    public Task<int> GetBotRating(string id) {
+        return Task.FromResult(BotRatings.TryGetValue(id, out int rating) ? rating : -1);
+    }
+
+    public Task SetBotRating(string id, int rating) {
+        BotRatings[id] = rating;
+        return Task.CompletedTask;
     }
 }

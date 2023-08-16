@@ -5,7 +5,7 @@ namespace SwiftBackend.Storage.MySQL;
 
 public partial class MySqlStorage {
     
-    public async Task<SwiftUser?> GetUser(string id) {
+    public async Task<SwiftUser> GetUser(string id) {
         MySqlDataReader reader = await MySqlHelper.ExecuteReaderAsync(_connectString, @$"SELECT * FROM {_tablePrefix}users WHERE id='{id}'");
         if (!reader.HasRows) {
             await reader.DisposeAsync();

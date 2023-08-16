@@ -5,9 +5,9 @@ namespace SwiftBackend;
 
 public class SerbleApi {
     private const string APIURL = "https://api.serble.net/api/v1";
-    private string? _accessToken;
+    private string _accessToken;
 
-    public SerbleApi(string? accessToken = null) {
+    public SerbleApi(string accessToken = null) {
         _accessToken = accessToken;
     }
     
@@ -26,7 +26,7 @@ public class SerbleApi {
         return client;
     }
 
-    public async Task<AuthCodeExchangeResponse?> ExchangeAuthCode(string authcode) {
+    public async Task<AuthCodeExchangeResponse> ExchangeAuthCode(string authcode) {
         HttpClient client = GetHttpClient();
         try {
             string url = APIURL +
@@ -45,7 +45,7 @@ public class SerbleApi {
         }
     }
     
-    public async Task<AuthCodeExchangeResponse?> Refresh(string refreshToken) {
+    public async Task<AuthCodeExchangeResponse> Refresh(string refreshToken) {
         HttpClient client = GetHttpClient();
         try {
             string url = APIURL +
@@ -64,7 +64,7 @@ public class SerbleApi {
         }
     }
 
-    public async Task<SerbleUser?> GetUser() {
+    public async Task<SerbleUser> GetUser() {
         EnsureAccessToken();
         HttpClient client = GetHttpClient();
         try {
@@ -77,7 +77,7 @@ public class SerbleApi {
         }
     }
     
-    public async Task<string[]?> GetOwnedProducts() {
+    public async Task<string[]> GetOwnedProducts() {
         EnsureAccessToken();
         HttpClient client = GetHttpClient();
         try {

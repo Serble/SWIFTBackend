@@ -6,7 +6,7 @@ public class AuthenticationHeader {
 
     [FromHeader] public string Authorization { get; set; } = null!;
 
-    public async Task<SerbleUser?> GetUser() {
+    public async Task<SerbleUser> GetUser() {
         if (Program.AllowTestUser) {
             if (Authorization == "Bearer test") {
                 return new SerbleUser {
@@ -19,7 +19,7 @@ public class AuthenticationHeader {
         try {
             string token = Authorization.Replace("Bearer ", "");
             SerbleApi api = new(token);
-            SerbleUser? user = await api.GetUser();
+            SerbleUser user = await api.GetUser();
             if (user == null) {
                 return null;
             }
