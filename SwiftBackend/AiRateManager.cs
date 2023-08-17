@@ -9,7 +9,6 @@ public static class AiRateManager {
     public static async Task<int> GetBotRating(string domain) {
         HttpClient client = new();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {GlobalConfig.Config["open_ai_token"]}");
-        client.DefaultRequestHeaders.Add("Content-Type", "application/json");
         dynamic requestBody = new {
             model = "gpt-3.5-turbo",
             messages = new[] {
@@ -21,16 +20,18 @@ public static class AiRateManager {
                     role = "user",
                     content = domain
                 }
-            },
+            }
         };
-        HttpResponseMessage response = await client.PostAsync("https://api.openai.com/v1/engines/davinci/completions", new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8));
+        HttpResponseMessage response = await client.PostAsync("https://api.openai.com/v1/chat/completions", new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json"));
         if (!response.IsSuccessStatusCode) {
             Logger.Error("Failed to get bot rating");
             Logger.Error("Response: " + await response.Content.ReadAsStringAsync());
+            Logger.Error("Request:");
+            Logger.Error(JsonSerializer.Serialize(requestBody));
             return 75;
         }
-        dynamic responseBody = JsonSerializer.Deserialize<dynamic>(await response.Content.ReadAsStringAsync()) ?? throw new InvalidOperationException();
-        string rating = responseBody.choices[0].message.content;
+        JsonDocument responseBody = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        string rating = responseBody.RootElement.GetProperty("choices").EnumerateArray().First().GetProperty("message").GetProperty("content").GetString();
         if (!int.TryParse(rating, out int ratingInt)) {
             Logger.Error("Failed to get bot rating");
             Logger.Error("Response: " + await response.Content.ReadAsStringAsync());
